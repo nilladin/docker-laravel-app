@@ -1,0 +1,33 @@
+#!/bin/bash
+
+echo 'Create Laravel project'
+
+export COMPOSER_ALLOW_SUPERUSER=1; composer show;
+#composer create-project laravel/laravel /tmp/laravel-installed -n --no-dev --prefer-dist
+composer create-project lariele/laravel-tall-boilerplate /var/www/html -n --no-dev --prefer-dist
+
+cd /var/www/html
+echo 'NPM install'
+npm install
+
+npm install -g sass
+
+chmod -R 775 /var/www/html/public
+chmod -R ugo+rw /var/www/html/public
+
+echo 'NPM Run build'
+npm run build
+
+chmod -R 775 /var/www/html/public
+chmod -R ugo+rw /var/www/html/public
+
+php artisan migrate
+
+echo "Set owner to storage"
+chmod -R 775 /var/www/html/storage
+chmod -R ugo+rw /var/www/html/storage
+echo "Storage owner updated"
+
+#zip -r /tmp/laravel-installed.zip /tmp/laravel-installed/*
+
+#php artisan schedule:work
