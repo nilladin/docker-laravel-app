@@ -1,6 +1,6 @@
 FROM php:8.1.1-fpm
 
-WORKDIR /var/www/html
+WORKDIR /app
 
 #COPY . .
 
@@ -20,14 +20,12 @@ RUN docker-php-ext-enable gd
 #RUN pecl install xdebug
 #RUN docker-php-ext-enable xdebug
 
-RUN apt-get install -y libzip-dev exif zip unzip
+RUN apt-get install -y libzip-dev exif zip unzip nano
 
 RUN docker-php-ext-install pdo pdo_mysql zip bcmath ctype fileinfo exif opcache
 RUN docker-php-ext-enable exif
 RUN docker-php-ext-configure exif \
             --enable-exif
-
-
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -40,12 +38,8 @@ RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
 #RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get install -y nodejs
 
-
 ADD php/laravel-install /
 RUN chmod +x /laravel-install
-#RUN bash /laravel-install
+ENTRYPOINT ["bash", "/laravel-install"]
 
-#COPY . .
-#CMD ["bash", "/laravel-install"]
-#ENTRYPOINT ["bash", "/laravel-install"]
-#CMD bash -C '/laravel-install';'bash'
+CMD ["php-fpm"]
