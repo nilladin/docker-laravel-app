@@ -1,6 +1,6 @@
 FROM php:8.1.1-fpm
 
-WORKDIR /app
+WORKDIR /var/www/html
 
 #COPY . .
 
